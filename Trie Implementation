@@ -49,6 +49,18 @@ void insert(char *c){
      }
       return true;
   }
+  
+  void deleteWord(char *c){
+      TrieNode *curr = root;
+      int index;
+     for(int i=0;c[i]!='\0'; ++i){
+          index=c[i]-'a';
+          if(curr->child[index]!=nullptr || curr->child[index]->we>0){
+              curr->child[index]->we--;
+          }
+          curr=curr->child[index];
+     }
+  }
  
 int main() {
 	// your code goes here
@@ -63,6 +75,8 @@ int main() {
 	insert(c);
 	
 	char d[]="api";
+	cout<<(search(d) ? "found": "not found");
+	deleteWord(d);
 	cout<<(search(d) ? "found": "not found");
 	return 0;
 }
