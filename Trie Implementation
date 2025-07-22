@@ -1,0 +1,68 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct TrieNode{
+    char a;
+    int we;
+    TrieNode *child[26];
+     TrieNode(char ch = '/') {
+        a = ch;
+        we = 0;
+        for (int i = 0; i < 26; ++i) {
+            child[i] = nullptr;
+        }
+    }
+};
+
+TrieNode* root=nullptr;
+
+void init() {
+    root = new TrieNode('/');
+}
+
+TrieNode* getNewNode(char c) {
+    return new TrieNode(c);
+}
+
+void insert(char *c){
+    TrieNode *curr=root;
+    int index;
+    for(int i=0;c[i]!='\0'; ++i){
+        index=c[i]-'a';
+        if(curr->child[index]==nullptr){
+            curr->child[index]=getNewNode(c[i]);
+        }
+        curr->child[index]->we+=1;
+        curr = curr->child[index];
+    }
+}
+  
+  bool search(char *c){
+      TrieNode *curr = root;
+      int index;
+     for(int i=0;c[i]!='\0'; ++i){
+          index=c[i]-'a';
+          if(curr->child[index]==nullptr || curr->child[index]->we==0){
+              return false;
+          }
+          curr=curr->child[index];
+     }
+      return true;
+  }
+ 
+int main() {
+	// your code goes here
+	init();
+	char a[]="army";
+	char b[]="armyt";
+	char c[]="apir";
+			
+	
+	insert(a);
+	insert(b);
+	insert(c);
+	
+	char d[]="api";
+	cout<<(search(d) ? "found": "not found");
+	return 0;
+}
