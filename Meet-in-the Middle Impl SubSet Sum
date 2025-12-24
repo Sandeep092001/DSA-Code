@@ -1,0 +1,56 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool haveVal(int toFind, vector<int>& right, int l, int h){
+    
+    while(l<=h){
+        int mid=l+(h-l)/2;
+        if(right[mid]==toFind) return true;
+        
+        else if(right[mid]>toFind){
+            h=mid-1;
+        }else{
+            l=mid+1;
+        }
+    }
+    return false;
+}
+
+vector<int> subsetsum(vector<int>& arr){
+    int n = arr.size();
+    vector<int> res;
+    for(int i=0;i<(1<<n);i++){
+        int sum=0;
+        for(int j=0;j<n;j++){
+            if((i>>j)&1){
+                sum+=arr[j];
+            }
+        }
+        res.push_back(sum);
+    }
+    return res;
+}
+
+long long solve(int n,int x, vector<int> a){
+    vector<int> left;
+    vector<int> right;
+    
+    for(int i=0;i<n;i++){
+        if(i<n/2) left.push_back(a[i]);
+        else right.push_back(a[i]);
+    }
+    
+    vector<int> lsubsum = subsetsum(left);
+    vector<int> rsubsum = subsetsum(right);
+    
+    sort(rsubsum.begin(), rsubsum.end());
+    
+    int h=rsubsum.size();
+    long long count=0;
+    for(int num: lsubsum){
+        int toFind=x-num;
+        count+=upper_bound(rsubsum.begin(), rsubsum.end(), toFind)-lower_bound(rsubsum.begin(), rsubsum.end(), toFind);
+    }
+    
+    return count;
+}
